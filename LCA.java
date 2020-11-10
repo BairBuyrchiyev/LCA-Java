@@ -4,11 +4,14 @@ import java.util.List;
 
 class Node {
     int data;
-    Node left, right;
+    private ArrayList<Node> children = new ArrayList<Node>();
 
     Node(int value) {
         data = value;
-        left = right = null;
+    }
+
+    void addNode(Node node) {
+        children.add(node);
     }
 }
 
