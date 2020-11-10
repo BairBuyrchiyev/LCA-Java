@@ -10,8 +10,21 @@ class Node {
         data = value;
     }
 
-    void addNode(Node node) {
+    void addChild(Node node) {
         children.add(node);
+    }
+
+    boolean hasChildren() {
+        if (children.isEmpty()) return false;
+        return true;
+    }
+
+    int numChildren() {
+        return children.size();
+    }
+
+    Node getChild(int i) {
+        return children.get(i - 1);
     }
 }
 
@@ -39,8 +52,8 @@ public class LCA
         int i;
         for (i = 0; i < path1.size() && i < path2.size(); i++) {
 
-		if (!path1.get(i).equals(path2.get(i)))
-			break;
+			if (!path1.get(i).equals(path2.get(i)))
+				break;
         }
 
         return path1.get(i-1);
@@ -58,11 +71,18 @@ public class LCA
             return true;
         }
 
-        if (root.left != null && findPath(root.left, n, path)) {
+        /*if (root.left != null && findPath(root.left, n, path)) {
             return true;
         }
 
         if (root.right != null && findPath(root.right, n, path)) {
+            return true;
+        } */
+
+        if (root.hasChildren()) {
+            for (int i = 0; i < root.numChildren(); i++) {
+                findPath(root.getChild(i + 1), n, path);
+            }
             return true;
         }
 
@@ -73,19 +93,40 @@ public class LCA
 
     public static void main(String[] args) 
     { 
-        LCA tree = new LCA(); 
-        tree.root = new Node(1); 
-        tree.root.left = new Node(2); 
-        tree.root.right = new Node(3); 
-        tree.root.left.left = new Node(4); 
-        tree.root.left.right = new Node(5); 
-        tree.root.right.left = new Node(6); 
-        tree.root.right.right = new Node(7); 
-  
-        System.out.println("LCA(4, 5): " + tree.findLCA(4,5)); 
-        System.out.println("LCA(4, 6): " + tree.findLCA(4,6)); 
-        System.out.println("LCA(3, 4): " + tree.findLCA(3,4)); 
-        System.out.println("LCA(2, 4): " + tree.findLCA(2,4)); 
+        LCA tree = new LCA();
+        tree.root = new Node(1);
+        tree.root.addChild((new Node(2)));
+        tree.root.getChild(1).addChild(new Node(3));
+        tree.root.getChild(1).getChild(1).addChild(new Node(4));
+        tree.root.getChild(1).getChild(1).getChild(1).addChild(new Node(7));
+        tree.root.getChild(1).addChild(new Node(5));
+        tree.root.getChild(1).getChild(2).addChild(new Node(6));
+        tree.root.getChild(1).getChild(2).getChild(1).addChild(new Node(7));
+        
+        System.out.println(tree.root.data);
+        System.out.println(tree.root.getChild(1).data);
+        System.out.println(tree.root.getChild(1).getChild(1).data + "   " + tree.root.getChild(1).getChild(2).data);
+        System.out.println(tree.root.getChild(1).getChild(1).getChild(1).data + "   " + tree.root.getChild(1).getChild(2).getChild(1).data);
+        System.out.println(tree.root.getChild(1).getChild(1).getChild(1).getChild(1).data + " " + tree.root.getChild(1).getChild(2).getChild(1).getChild(1).data);
+        
+        /*
+        
+        1
+        |
+        2
+        | \
+        3  5
+        |  |
+        4  6
+         \/
+         7
+         
+        */
+        
+        System.out.println("LCA(4, 5): " + tree.findLCA(4,5));
+        System.out.println("LCA(4, 6): " + tree.findLCA(4,6));
+        System.out.println("LCA(3, 4): " + tree.findLCA(3,4));
+        System.out.println("LCA(2, 4): " + tree.findLCA(2,4));
 
         //ACYCLIC BABYYY
     } 
