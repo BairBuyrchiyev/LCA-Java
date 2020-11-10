@@ -71,19 +71,10 @@ public class LCA
             return true;
         }
 
-        /*if (root.left != null && findPath(root.left, n, path)) {
-            return true;
-        }
-
-        if (root.right != null && findPath(root.right, n, path)) {
-            return true;
-        } */
-
         if (root.hasChildren()) {
             for (int i = 0; i < root.numChildren(); i++) {
-                findPath(root.getChild(i + 1), n, path);
+                if (findPath(root.getChild(i + 1), n, path)) return true;
             }
-            return true;
         }
 
         path.remove(path.size()-1);
@@ -127,7 +118,5 @@ public class LCA
         System.out.println("LCA(4, 6): " + tree.findLCA(4,6));
         System.out.println("LCA(3, 4): " + tree.findLCA(3,4));
         System.out.println("LCA(2, 4): " + tree.findLCA(2,4));
-
-        //ACYCLIC BABYYY
     } 
 } 
